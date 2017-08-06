@@ -7,7 +7,10 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 
+import org.junit.runners.Parameterized.UseParametersRunnerFactory;
 import org.primefaces.model.DualListModel;
 
 import br.com.flightPlane.model.Nave;
@@ -21,7 +24,7 @@ import br.com.flightPlane.resource.SwapiResource;
  *
  */
 
-@ApplicationScoped
+@ViewScoped
 @ManagedBean(name = "planoVooBean")
 public class PlanoVooBean implements Serializable {
 
@@ -64,7 +67,36 @@ public class PlanoVooBean implements Serializable {
 	}
 	
 	public void criarPlano() {
-		System.out.println("criando plano...");
+		
+		System.out.println("Criando plano de voo");
+		
+		if(validaPlanoVoo()){
+			
+			PlanoDeVoo novo = new PlanoDeVoo();
+			novo.setId(listPlanosVoo.size() == 0 ? 1 : listPlanosVoo.size() + 1);
+			novo.setTripulacao(dualListTripulacoes.getTarget());
+			novo.setNave(naveSelecionada);
+			novo.setPlaneta(planetaSelecionado);
+			
+			listPlanosVoo.add(novo);
+			System.out.println("Plano de Voo criado com sucesso!!!");
+		}
+		
+	}
+	
+	public boolean validaPlanoVoo(){
+		if(naveSelecionada == null || planetaSelecionado == null){
+			System.out.println("Não foi possível criar Plano de Voo.");
+			return false;
+		}
+		
+		if(dualListTripulacoes == null || dualListTripulacoes.getTarget() == null || 
+				dualListTripulacoes.getTarget().isEmpty() || dualListTripulacoes.getTarget().size() == 0){
+			System.out.println("Não foi possível criar Plano de Voo.");
+			return false;
+		}
+		
+		return true;
 	}
 
 	public List<PlanoDeVoo> getListPlanosVoo() {

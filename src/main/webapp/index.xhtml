@@ -5,45 +5,74 @@
 
 <h:head>
 	<title>Plano de Voo</title>
+	<style>
+		.titulo{
+		font-size: 35px;
+		font-style: oblique;
+		font-family: fantasy;
+		padding-left: 35%;
+		}
+	</style>
 </h:head>
 <h:body>
-	<h:form>
+	<h:form id="formPlano">
 
 		<p:panelGrid id="panelPlano">
-			<p:outputLabel value="Tripulação" />
-			<p:pickList id="tripulacaoPickList"
-				value="#{planoVooBean.dualListTripulacoes}" var="pessoa"
-				effect="bounce" itemValue="#{pessoa.id}" itemLabel="#{pessoa.nome}">
-			</p:pickList>
-			<h:selectOneMenu value="#{planoVooBean.naveSelecionada}">
-				<f:selectItem itemValue="" itemLabel="Selecione uma nave" />
-				<f:selectItems value="#{planoVooBean.naveList}" var="nave"
-					itemValue="#{nave.id}" itemLabel="#{nave.nome}" />
-			</h:selectOneMenu>
-			<h:selectOneMenu value="#{planoVooBean.planetaSelecionado}">
-				<f:selectItem itemValue="" itemLabel="Selecione um destino" />
-				<f:selectItems value="#{planoVooBean.planetaList}" var="planeta"
-					itemValue="#{planeta.id}" itemLabel="#{planeta.nome}" />
-			</h:selectOneMenu>
+			
+			<h:outputLabel value="Criador de Plano de Voo v1.0" styleClass="titulo"/>
+			
+			<p:panel>
+				<p:outputLabel value="Tripulação" />
+				<p:pickList id="tripulacaoPickList" style="margin-top: 15px; margin-bottom: 15px;"
+					value="#{planoVooBean.dualListTripulacoes}" var="pessoa" converter="entityConverter"
+					effect="bounce" itemValue="#{pessoa}" itemLabel="#{pessoa.nome}">
+				</p:pickList>
+			</p:panel>
+			
+			<p:panel style="border:none">
+				<p:outputLabel value="Nave" style="padding-right: 70px;"/>
+				<h:selectOneMenu id="comboNave" value="#{planoVooBean.naveSelecionada}" converter="entityConverter">
+					<f:selectItem itemValue="" itemLabel="Selecione uma nave" />
+					<f:selectItems value="#{planoVooBean.naveList}" var="nave"
+						itemValue="#{nave}" itemLabel="#{nave.nome}"/>
+				</h:selectOneMenu>
+			</p:panel>
+					
+			<p:panel style="border:none">
+				<p:outputLabel value="Planeta" style="padding-right: 50px;"/>		
+				<h:selectOneMenu id="comboPlaneta" value="#{planoVooBean.planetaSelecionado}" converter="entityConverter">
+					<f:selectItem itemValue="" itemLabel="Selecione um destino" />
+					<f:selectItems value="#{planoVooBean.planetaList}" var="planeta"
+						itemValue="#{planeta}" itemLabel="#{planeta.nome}"/>
+				</h:selectOneMenu>
+			</p:panel>
+			
+			<p:commandButton id="cadastrar" value="Cadastrar" actionListener="#{planoVooBean.criarPlano}" process="@form" update="outPanelTable"/>
+		
 		</p:panelGrid>
 
-		<p:dataTable var="car" value="#{dtBasicView.cars}">
-			<p:column headerText="Id">
-				<h:outputText value="#{car.id}" />
+	<p:outputPanel id="outPanelTable" style="margin-top: 25px;">
+
+		<p:dataTable id="tablePlano" var="voo" value="#{planoVooBean.listPlanosVoo}" emptyMessage="Não há planos de voo cadastrados."
+		rows="5" paginator="true" paginatorAlwaysVisible="true">
+			<p:column headerText="Id" width="80">
+				<h:outputText value="#{voo.id}" />
 			</p:column>
 
-			<p:column headerText="Year">
-				<h:outputText value="#{car.year}" />
+			<p:column headerText="Tripulação" width="300">
+				<h:outputText value="#{voo.nomesTripulacoes}" />
 			</p:column>
 
-			<p:column headerText="Brand">
-				<h:outputText value="#{car.brand}" />
+			<p:column headerText="Nave" width="300">
+				<h:outputText value="#{voo.nave.nome}" />
 			</p:column>
 
-			<p:column headerText="Color">
-				<h:outputText value="#{car.color}" />
+			<p:column headerText="Planeta Destino" width="300">
+				<h:outputText value="#{voo.planeta.nome}" />
 			</p:column>
 		</p:dataTable>
+		
+	</p:outputPanel>
 
 	</h:form>
 </h:body>

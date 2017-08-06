@@ -3,6 +3,8 @@
  */
 package br.com.flightPlane.model;
 
+import java.util.List;
+
 /**
  * @author Ramon Vieira
  *
@@ -12,7 +14,7 @@ public class PlanoDeVoo {
 
 	private int id;
 	private Nave nave;
-	private Tripulacao tripulacao;
+	private List<Tripulacao> tripulacao;
 	private Planeta planeta;
 
 	public int getId() {
@@ -31,11 +33,11 @@ public class PlanoDeVoo {
 		this.nave = nave;
 	}
 
-	public Tripulacao getTripulacao() {
+	public List<Tripulacao> getTripulacao() {
 		return tripulacao;
 	}
 
-	public void setTripulacao(Tripulacao tripulacao) {
+	public void setTripulacao(List<Tripulacao> tripulacao) {
 		this.tripulacao = tripulacao;
 	}
 
@@ -47,4 +49,24 @@ public class PlanoDeVoo {
 		this.planeta = planeta;
 	}
 
+	public String getNomesTripulacoes(){
+		
+		StringBuilder sb = new StringBuilder();
+		int count = 0;
+		
+		if(tripulacao.size() > 0){
+			for (Tripulacao pessoa : tripulacao) {
+				if((tripulacao.size()-1) == count){
+					sb.append(pessoa.getNome());
+				} else {
+					sb.append(pessoa.getNome() + ", ");
+				}
+				count++;
+			}
+			return sb.toString();
+		}
+		
+		return "";	
+	}
+	
 }
