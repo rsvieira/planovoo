@@ -14,8 +14,11 @@
 		}
 	</style>
 </h:head>
+
 <h:body>
 	<h:form id="formPlano">
+
+	<p:growl id="growl" showDetail="true" sticky="true" life="100"/> 
 
 		<p:panelGrid id="panelPlano">
 			
@@ -47,7 +50,7 @@
 				</h:selectOneMenu>
 			</p:panel>
 			
-			<p:commandButton id="cadastrar" value="Cadastrar" actionListener="#{planoVooBean.criarPlano}" process="@form" update="outPanelTable"/>
+			<p:commandButton id="cadastrar" value="Cadastrar" actionListener="#{planoVooBean.criarPlano}" process="@form" update="outPanelTable growl"/>
 		
 		</p:panelGrid>
 
@@ -70,9 +73,67 @@
 			<p:column headerText="Planeta Destino" width="300">
 				<h:outputText value="#{voo.planeta.nome}" />
 			</p:column>
+			
+			<p:column style="width:32px;text-align: center">
+	             <p:commandButton actionListener="#{planoVooBean.criaDetalhe(voo)}" process="@form" update="formPlano:planoVooDetalheDialog"
+	             oncomplete="PF('planoVooDialog').show()" icon="ui-icon-search" title="View" />
+	        </p:column>
+			
 		</p:dataTable>
 		
 	</p:outputPanel>
+		
+		<p:dialog id="planoVooDialogId" header="Detalhe Plano Voo" widgetVar="planoVooDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+	        <p:outputPanel id="planoVooDetalheDialog" style="text-align:center;">
+	            <p:panelGrid id="panelGridDetalhamento"  columns="2" rendered="true" columnClasses="label,value">
+	                
+	                <f:facet name="Detalhe Plano Voo" /> 
+	 
+	 				<h:outputText id="outPutDetalhamentoTripulacao" value="Tripulação" style="font-weight: bold"/>
+	 						<p:dataTable id="tableDetalhamentoTripulacao" var="pessoa" value="#{planoVooBean.tripulacaoDetalhe}" emptyMessage="Não há planos de voo cadastrados."
+								rows="5" paginator="true" paginatorAlwaysVisible="true">
+						
+									<p:column headerText="Nome" width="300">
+										<h:outputText value="#{pessoa.nome}" />
+									</p:column>
+						
+									<p:column headerText="Genero" width="300">
+										<h:outputText value="#{pessoa.genero}" />
+									</p:column>
+									
+							</p:dataTable>
+				</p:panelGrid>
+
+ 				<br/>	
+
+				<p:panelGrid columns="2" rendered="true" columnClasses="label,value">			
+	 				<p:panel style="width: 612px;height: 97px !important;">
+		 				<h:outputText value="Nave" style="font-weight: bold; padding-top: 10px; padding-bottom: 10px;"/>
+		 					<br/><h:outputText value="Nome: " style="font-weight: bold"/>
+		 						<h:outputText value="#{planoVooBean.naveDetalhe.nome}" />
+		 					<br/><h:outputText value="Modelo: " style="font-weight: bold"/>
+		 						<h:outputText value="#{planoVooBean.naveDetalhe.modelo}" />
+		 					<br/><h:outputText value="Quantidade de passageiros: " style="font-weight: bold"/>
+		 						<h:outputText value="#{planoVooBean.naveDetalhe.passageiros}" />
+	 				</p:panel>
+	 				
+	 				<p:panel style="width: 612px;">
+		 				<h:outputText value="Planeta" style="font-weight: bold"/>
+		 					<br/><h:outputText value="Nome: " style="font-weight: bold"/>
+		 						<h:outputText value="#{planoVooBean.planetaDetalhe.nome}" />	
+		 					<br/><h:outputText value="Clima: " style="font-weight: bold"/>
+		 						<h:outputText value="#{planoVooBean.planetaDetalhe.clima}" />
+		 					<br/><h:outputText value="Diametro: " style="font-weight: bold"/>	
+		 						<h:outputText value="#{planoVooBean.planetaDetalhe.diametro}" />
+		 					<br/><h:outputText value="População: " style="font-weight: bold"/>	
+		 						<h:outputText value="#{planoVooBean.planetaDetalhe.population}" />
+		 					<br/><h:outputText value="Terreno: " style="font-weight: bold"/>	
+		 						<h:outputText value="#{planoVooBean.planetaDetalhe.terreno}" />
+	 				</p:panel>
+ 				</p:panelGrid>
+	            
+	        </p:outputPanel>
+	    </p:dialog>
 
 	</h:form>
 </h:body>

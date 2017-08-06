@@ -5,19 +5,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 
-import org.junit.runners.Parameterized.UseParametersRunnerFactory;
 import org.primefaces.model.DualListModel;
 
 import br.com.flightPlane.model.Nave;
 import br.com.flightPlane.model.Planeta;
 import br.com.flightPlane.model.PlanoDeVoo;
 import br.com.flightPlane.model.Tripulacao;
-import br.com.flightPlane.resource.SwapiResource;
+import br.com.flightPlane.service.PlanoVooService;
 
 /**
  * @author Ramon Vieira
@@ -29,8 +26,10 @@ import br.com.flightPlane.resource.SwapiResource;
 public class PlanoVooBean implements Serializable {
 
 	private static final long serialVersionUID = -2854217700981455855L;
-
-	private SwapiResource swapiResource;
+	
+	private PlanoVooService planoVooService;
+	
+	List<Tripulacao> tripulacaoTarget;
 
 	private List<PlanoDeVoo> listPlanosVoo;
 	
@@ -42,27 +41,30 @@ public class PlanoVooBean implements Serializable {
 	
 	private Nave naveSelecionada;
 	private Planeta	planetaSelecionado;
+	
+	private PlanoDeVoo planoSelecionado;
+	
+	private List<Tripulacao> tripulacaoDetalhe;
+	private Nave naveDetalhe;
+	private Planeta	planetaDetalhe;
 
 	@PostConstruct
 	public void init(){
-		swapiResource = new SwapiResource();
+		instanciasList();
+		planoVooService.populaListas(tripulacaoList, naveList, planetaList, dualListTripulacoes, tripulacaoTarget);
+	}
+	
+	public void instanciasList(){
+		planoVooService = new PlanoVooService();
+		
 		listPlanosVoo = new ArrayList<PlanoDeVoo>();
-		populaListas();
-	}
-	
-	public void populaListas() {
-
-		tripulacaoList = swapiResource.findAllPeople();
-		naveList = swapiResource.findAllStarShips();
-		planetaList = swapiResource.findAllPlantets();
 		
-        List<Tripulacao> tripulacaoTarget = new ArrayList<Tripulacao>();
-         
-        dualListTripulacoes = new DualListModel<Tripulacao>(tripulacaoList, tripulacaoTarget);
+		tripulacaoList = new ArrayList<Tripulacao>();
+		naveList = new ArrayList<Nave>();
+		planetaList = new ArrayList<Planeta>();
 		
-	}
-	
-	public void inserePlanoVoo(){
+		dualListTripulacoes = new DualListModel<>();
+		tripulacaoTarget = new ArrayList<Tripulacao>();
 		
 	}
 	
@@ -70,33 +72,27 @@ public class PlanoVooBean implements Serializable {
 		
 		System.out.println("Criando plano de voo");
 		
-		if(validaPlanoVoo()){
+		if(planoVooService.validaCampos(naveSelecionada, planetaSelecionado, dualListTripulacoes)){
 			
 			PlanoDeVoo novo = new PlanoDeVoo();
 			novo.setId(listPlanosVoo.size() == 0 ? 1 : listPlanosVoo.size() + 1);
 			novo.setTripulacao(dualListTripulacoes.getTarget());
 			novo.setNave(naveSelecionada);
 			novo.setPlaneta(planetaSelecionado);
-			
-			listPlanosVoo.add(novo);
-			System.out.println("Plano de Voo criado com sucesso!!!");
+
+			if(planoVooService.validaPlanoVoo(listPlanosVoo, novo)){
+				listPlanosVoo.add(novo);
+				System.out.println("Plano de Voo criado com sucesso!!!");
+				planoVooService.sucessMessage();
+			}
 		}
-		
 	}
 	
-	public boolean validaPlanoVoo(){
-		if(naveSelecionada == null || planetaSelecionado == null){
-			System.out.println("Não foi possível criar Plano de Voo.");
-			return false;
-		}
-		
-		if(dualListTripulacoes == null || dualListTripulacoes.getTarget() == null || 
-				dualListTripulacoes.getTarget().isEmpty() || dualListTripulacoes.getTarget().size() == 0){
-			System.out.println("Não foi possível criar Plano de Voo.");
-			return false;
-		}
-		
-		return true;
+	public void criaDetalhe(PlanoDeVoo plano){
+		planoSelecionado = plano;
+		tripulacaoDetalhe = planoSelecionado.getTripulacao();
+		naveDetalhe = plano.getNave();
+		planetaDetalhe = plano.getPlaneta();
 	}
 
 	public List<PlanoDeVoo> getListPlanosVoo() {
@@ -105,14 +101,6 @@ public class PlanoVooBean implements Serializable {
 
 	public void setListPlanosVoo(List<PlanoDeVoo> listPlanosVoo) {
 		this.listPlanosVoo = listPlanosVoo;
-	}
-
-	public SwapiResource getSwapiResource() {
-		return swapiResource;
-	}
-
-	public void setSwapiResource(SwapiResource swapiResource) {
-		this.swapiResource = swapiResource;
 	}
 
 	public List<Tripulacao> getTripulacaoList() {
@@ -161,6 +149,38 @@ public class PlanoVooBean implements Serializable {
 
 	public void setPlanetaSelecionado(Planeta planetaSelecionado) {
 		this.planetaSelecionado = planetaSelecionado;
+	}
+
+	public List<Tripulacao> getTripulacaoDetalhe() {
+		return tripulacaoDetalhe;
+	}
+
+	public void setTripulacaoDetalhe(List<Tripulacao> tripulacaoDetalhe) {
+		this.tripulacaoDetalhe = tripulacaoDetalhe;
+	}
+
+	public PlanoDeVoo getPlanoSelecionado() {
+		return planoSelecionado;
+	}
+
+	public void setPlanoSelecionado(PlanoDeVoo planoSelecionado) {
+		this.planoSelecionado = planoSelecionado;
+	}
+
+	public Nave getNaveDetalhe() {
+		return naveDetalhe;
+	}
+
+	public void setNaveDetalhe(Nave naveDetalhe) {
+		this.naveDetalhe = naveDetalhe;
+	}
+
+	public Planeta getPlanetaDetalhe() {
+		return planetaDetalhe;
+	}
+
+	public void setPlanetaDetalhe(Planeta planetaDetalhe) {
+		this.planetaDetalhe = planetaDetalhe;
 	}
 	
 }
