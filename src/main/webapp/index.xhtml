@@ -1,0 +1,50 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+<h:head>
+	<title>Plano de Voo</title>
+</h:head>
+<h:body>
+	<h:form>
+
+		<p:panelGrid id="panelPlano">
+			<p:outputLabel value="Tripulação" />
+			<p:pickList id="tripulacaoPickList"
+				value="#{planoVooBean.dualListTripulacoes}" var="pessoa"
+				effect="bounce" itemValue="#{pessoa.id}" itemLabel="#{pessoa.nome}">
+			</p:pickList>
+			<h:selectOneMenu value="#{planoVooBean.naveSelecionada}">
+				<f:selectItem itemValue="" itemLabel="Selecione uma nave" />
+				<f:selectItems value="#{planoVooBean.naveList}" var="nave"
+					itemValue="#{nave.id}" itemLabel="#{nave.nome}" />
+			</h:selectOneMenu>
+			<h:selectOneMenu value="#{planoVooBean.planetaSelecionado}">
+				<f:selectItem itemValue="" itemLabel="Selecione um destino" />
+				<f:selectItems value="#{planoVooBean.planetaList}" var="planeta"
+					itemValue="#{planeta.id}" itemLabel="#{planeta.nome}" />
+			</h:selectOneMenu>
+		</p:panelGrid>
+
+		<p:dataTable var="car" value="#{dtBasicView.cars}">
+			<p:column headerText="Id">
+				<h:outputText value="#{car.id}" />
+			</p:column>
+
+			<p:column headerText="Year">
+				<h:outputText value="#{car.year}" />
+			</p:column>
+
+			<p:column headerText="Brand">
+				<h:outputText value="#{car.brand}" />
+			</p:column>
+
+			<p:column headerText="Color">
+				<h:outputText value="#{car.color}" />
+			</p:column>
+		</p:dataTable>
+
+	</h:form>
+</h:body>
+</html>
