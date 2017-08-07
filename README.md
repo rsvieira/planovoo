@@ -10,4 +10,7 @@ Projeto com objetivo de criar um plano de voo para viagens intergaláticas.
 *PrimeFaces   
 *Maven   
 *Junit   
-*Servidor de aplicação TomCatv7.0   
+*Servidor de aplicação TomCatv7.0  
+
+execução dos test unitarios.
+command: **mvn test**   
