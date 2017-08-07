@@ -3,6 +3,7 @@
  */
 package br.com.flightPlane.model;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -10,7 +11,7 @@ import java.util.List;
  *
  */
 
-public class PlanoDeVoo {
+public class PlanoDeVoo implements Serializable{
 
 	private int id;
 	private Nave nave;

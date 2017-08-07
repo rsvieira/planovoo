@@ -23,6 +23,15 @@ public class Tripulacao implements Serializable {
 
 	@SerializedName("gender")
 	private String genero;
+	
+	public Tripulacao (){
+		
+	}
+	
+	public Tripulacao (String nome, String genero){
+		this.nome = nome;
+		this.genero = genero;
+	}
 
 	public Integer getId() {
 		return id;

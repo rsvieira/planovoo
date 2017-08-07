@@ -62,16 +62,19 @@ public class PlanoVooService {
 	
 	public boolean validaPlanoVoo(List<PlanoDeVoo> planoDeVooList, PlanoDeVoo planoDeVoo){
 
-		if(planoDeVooList == null){
+		if(planoDeVooList == null || planoDeVoo == null){
 			System.out.println("Não foi possível criar Plano de Voo.");
-			erroMessage();
 			return false;
+		}
+		
+		if(planoDeVoo != null && planoDeVoo.getTripulacao().size() > planoDeVoo.getNave().getPassageiros()){
+				System.out.println("Não foi possível criar Plano de Voo.");
+				return false;
 		}
 		
 		if(planoDeVooList != null && planoDeVooList.size() >= 1){
 			if(planoDeVooList.get(planoDeVooList.size() - 1).getPlaneta().equals(planoDeVoo.getPlaneta())){
 				System.out.println("Não foi possível criar Plano de Voo.");
-				erroMessage();
 				return false;
 			}
 		}

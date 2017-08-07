@@ -84,8 +84,10 @@ public class PlanoVooBean implements Serializable {
 				listPlanosVoo.add(novo);
 				System.out.println("Plano de Voo criado com sucesso!!!");
 				planoVooService.sucessMessage();
+			} else {
+				planoVooService.erroMessage();
 			}
-		}
+		} 
 	}
 	
 	public void criaDetalhe(PlanoDeVoo plano){

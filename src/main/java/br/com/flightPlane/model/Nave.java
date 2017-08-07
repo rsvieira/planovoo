@@ -23,6 +23,15 @@ public class Nave implements Serializable{
 	
 	@SerializedName("passengers")
 	private int passageiros;
+	
+	public Nave (){
+		
+	}
+	
+	public Nave (String nome, int passageiros){
+		this.nome = nome;
+		this.passageiros = passageiros;
+	}
 
 	public int getId() {
 		return id;

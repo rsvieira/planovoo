@@ -32,6 +32,14 @@ public class Planeta implements Serializable {
 	
 	@SerializedName("population")
 	private String population;
+	
+	public Planeta(){
+		
+	}
+	
+	public Planeta(String nome){
+		this.nome = nome;
+	}
 
 	public int getId() {
 		return id;
@@ -81,6 +89,58 @@ public class Planeta implements Serializable {
 		this.population = population;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((clima == null) ? 0 : clima.hashCode());
+		result = prime * result + ((diametro == null) ? 0 : diametro.hashCode());
+		result = prime * result + id;
+		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
+		result = prime * result + ((population == null) ? 0 : population.hashCode());
+		result = prime * result + ((terreno == null) ? 0 : terreno.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Planeta other = (Planeta) obj;
+		if (clima == null) {
+			if (other.clima != null)
+				return false;
+		} else if (!clima.equals(other.clima))
+			return false;
+		if (diametro == null) {
+			if (other.diametro != null)
+				return false;
+		} else if (!diametro.equals(other.diametro))
+			return false;
+		if (id != other.id)
+			return false;
+		if (nome == null) {
+			if (other.nome != null)
+				return false;
+		} else if (!nome.equals(other.nome))
+			return false;
+		if (population == null) {
+			if (other.population != null)
+				return false;
+		} else if (!population.equals(other.population))
+			return false;
+		if (terreno == null) {
+			if (other.terreno != null)
+				return false;
+		} else if (!terreno.equals(other.terreno))
+			return false;
+		return true;
+	}
+	
 //	@Override
 //	public String toString() {
 //		return "\nPlaneta \n 		[id=" + id + "] nome=" + nome + "]\n		[ diametro=" + diametro + "]\n		[ clima=" + clima + "]\n		[ terreno="
