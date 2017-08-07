@@ -82,7 +82,6 @@ public class PlanoVooBean implements Serializable {
 
 			if(planoVooService.validaPlanoVoo(listPlanosVoo, novo)){
 				listPlanosVoo.add(novo);
-				System.out.println("Plano de Voo criado com sucesso!!!");
 				planoVooService.sucessMessage();
 			} else {
 				planoVooService.erroMessage();
